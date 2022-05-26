@@ -51,29 +51,24 @@ button {
     background:rgba(9, 165, 170, 0.973);
 }
 
- .zero {
+ .operand.zero {
     grid-column: span 2;
  }
 
- .multiply,
- .divide,
- .subtract,
- .add,
+ .operator,
 .equals {
     background: orange;
     margin-right: 5px;
 }
 
 .equals,
-.dot,
-.zero {
+.operand.dot,
+.operand.zero {
     margin-bottom: 5px;
 }
 
 .clear,
-.seven,
-.four,
-.one,
-.zero {
+.operand.left,
+.operand.zero {
     margin-left: 5px;
 }
