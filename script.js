@@ -12,7 +12,6 @@ let input = {
     num: '',
     num2: '',
 }
-
 let displayValues = {
     num: '',
     opr: '',
@@ -33,7 +32,7 @@ const divide = function(a, b) {
     return a / b;
 };
 const operate = function(num, opr, num2) {
-    return opr(num, num2);
+    return opr(+num, +num2);
 };
 
 operand.forEach(btn => btn.addEventListener('click', (e) => { 
@@ -50,7 +49,10 @@ operand.forEach(btn => btn.addEventListener('click', (e) => {
     }
 }));
 
-operator.forEach(btn => btn.addEventListener('click', (e) => {
+operator.forEach(btn => btn.addEventListener('click', (e) => {    
+    if(isNum2 === true) {
+        getAnswer();
+    }
     if(e.target.id.toString() === 'divide') {
         displayValues.opr = divide;
     } else if (e.target.id.toString() === 'multiply') {
@@ -60,17 +62,14 @@ operator.forEach(btn => btn.addEventListener('click', (e) => {
     } else if (e.target.id.toString() === 'add') {
         displayValues.opr = add;
     }
-    display.textContent += e.target.value;
     isOpr = true;
+    display.textContent += e.target.value;
+    
 }));
 
 equals.addEventListener('click', function() {
     if(isNum === true && isOpr === true && isNum2 === true) {
-        displayValues.answer = operate(displayValues.num, displayValues.opr, displayValues.num2);
-        display.textContent = displayValues.answer;
-        displayValues.opr = '';
-        isOpr = false;
-        isNum2 = false;
+        getAnswer();
     }
 })
 
@@ -79,6 +78,7 @@ clear.addEventListener('click', function() {
     isNum = false;
     isOpr = false;
     isNum2 = false;
+    isAnswer = false;
     displayValues = {
         num: '',
         opr: '',
@@ -88,4 +88,14 @@ clear.addEventListener('click', function() {
 });
 //ability to continue adding or subtracting numbers to the answer, not dependent on equals
 //function to get answer
+function getAnswer() {
+    displayValues.answer = operate(displayValues.num, displayValues.opr, displayValues.num2);
+    display.textContent = displayValues.answer;
+    displayValues.opr = '';
+    displayValues.num2 = '';
+    displayValues.num = displayValues.answer;
+    isOpr = false;
+    isNum2 = false;
+    isAnswer = true;
+};
 //function to take answer, add operator, take num2 and get new answer
