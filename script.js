@@ -4,9 +4,9 @@ const display = document.querySelector('.display');
 const clear = document.querySelector('.clear');
 const equals = document.querySelector('.equals');
 const dot = document.querySelector('.operand.dot')
+const negative = document.querySelector('.posNeg');
 display.length = 0;
 dot.disabled = false;
-let decimal = '.';
 let isNum = false;
 let isOpr = false;
 let isNum2 = false;
@@ -22,6 +22,7 @@ let displayValues = {
     answer: '',
 };
 
+//Basic math functions
 const add = function(a, b) {
     return (+a) + (+b);
 };
@@ -38,6 +39,7 @@ const operate = function(num, opr, num2) {
     return opr(+num, +num2);
 };
 
+//Gets number inputs and add to display
 operand.forEach(btn => btn.addEventListener('click', (e) => { 
     if(display.length < 10 || display.length == undefined) {
         if (isOpr === true || isAnswer === true) {
@@ -60,11 +62,21 @@ dot.addEventListener('click', function() {
     dot.disabled = true;
 })
 
+negative.addEventListener('click', function(){
+    checkNegative();
+    if (isNum2 === false) {
+        display.textContent = displayValues.num;
+    } else {
+        display.textContent = displayValues.num2;
+    }
+});
+
+//Gets operator input and does math if 2 numbers are stored
 operator.forEach(btn => btn.addEventListener('click', (e) => {    
     if(isNum2 === true) {
         getAnswer();
         dot.disabled = false;
-    }
+    } 
     if(e.target.id.toString() === 'divide') {
         displayValues.opr = divide;
     } else if (e.target.id.toString() === 'multiply') {
@@ -79,7 +91,6 @@ operator.forEach(btn => btn.addEventListener('click', (e) => {
     display.length = 0;
     display.textContent += e.target.value;
     operator.forEach(btn => btn.disabled = true);
-    
 }));
 
 equals.addEventListener('click', function() {
@@ -105,6 +116,22 @@ clear.addEventListener('click', function() {
     };
 });
 
+function checkNegative() {
+    if(isNum2 === false && isNum === true && isOpr === false) {
+        if(`${displayValues['num']}`.includes('-')) {
+            displayValues.num = `${displayValues['num']}`.slice(1);
+        } else {
+            displayValues.num = `-${displayValues['num']}`;
+        }
+    } else if (isNum2 === true) {
+        if(`${displayValues['num2']}`.includes('-')) {
+            displayValues.num2 = `${displayValues['num2']}`.slice(1);
+        } else {
+            displayValues.num2 = `-${displayValues['num2']}`;
+        }
+    }
+};
+
 function getAnswer() {
     displayValues.answer = Number(operate(displayValues.num, displayValues.opr, displayValues.num2)).toFixed(2);  
     if(`${displayValues['answer']}`.length > 11) {
@@ -122,4 +149,5 @@ function getAnswer() {
     isOpr = false;
     isNum2 = false;
     isAnswer = true;
+    isNum = true;
 };
